@@ -42,6 +42,12 @@ def main():
         written = handle.read()
     if written != ENTRY:
         raise SystemExit("entry.txt does not match the entry text")
+    # The gate requires exactly one diary line: no newline inside the text
+    # and no control characters anywhere in what was written back.
+    if "\n" in written or "\r" in written:
+        raise SystemExit("entry.txt must hold a single line")
+    if any(ord(char) < 0x20 for char in written):
+        raise SystemExit("entry.txt must not contain control characters")
 
 
 if __name__ == "__main__":
